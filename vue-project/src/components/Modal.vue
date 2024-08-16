@@ -2,7 +2,7 @@
     <div class="modal overflow-y-scroll transition duration-700" v-if="showModal">
       <div class="modal-overlay " @click="closeModal"></div>
       <div ref="modalContainer" class="modal-content overflow-y-scroll " @click.stop>
-        <slot ></slot> <!-- Contenu du modal -->
+        <slot ></slot>
       </div>
     </div>
   </template>
@@ -16,29 +16,30 @@
       };
     },
      props: {
-      modalId: Number,
+      modalId: Number || String,
     },
-    methods: {
-      openModal() {
-        this.showModal = true;
-       
-        document.addEventListener("click", this.closeOnOutsideClick);
-      },
-      closeModal() {
-        this.showModal = false;
     
-        document.removeEventListener("click", this.closeOnOutsideClick);
-      },
-      closeOnOutsideClick(event) {
-        if (this.showModal) {
-       
-        const modalElement = this.$refs.modalContainer;
-        if (modalElement && modalElement.contains(event.target)) {
-          this.closeModal();
-        }
-        }
-      },
+
+    methods: {
+    openModal() {
+     
+      this.showModal = true;
+      document.addEventListener("click", this.closeOnOutsideClick);
     },
+  closeModal() {
+    
+    this.showModal = false;
+    document.removeEventListener("click", this.closeOnOutsideClick);
+  },
+  closeOnOutsideClick(event) {
+    if (this.showModal) {
+      const modalElement = this.$refs.modalContainer;
+      if (modalElement && modalElement.contains(event.target)) {
+        this.closeModal();
+      }
+    }
+  },
+},
   };
   </script>
   
@@ -80,8 +81,6 @@
     width: 40%;
     max-height: 90%;
   }
-  /* ::-webkit-scrollbar {
-    display: none;
-  } */
+
   </style>
   

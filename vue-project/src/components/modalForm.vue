@@ -44,19 +44,21 @@
   
   const props = defineProps({
     task: Object,
-    index: Number
+    index: String || Number 
   })
   
   const emit = defineEmits(['close'])
   
   const store = useTaskStore()
   const form = ref({ ...props.task })
+ 
   const errors = ref({})
+
   
   const validateForm = () => {
     errors.value = {}
-    if (!form.value.title) errors.value.title = 'Title is required'
-    if (!form.value.description) errors.value.description = 'Description is required'
+    if (!form.value.title.trim()) errors.value.title = 'Title is required'
+    if (!form.value.description.trim()) errors.value.description = 'Description is required'
     if (form.value.startDate && form.value.dueDate && form.value.startDate > form.value.dueDate) {
       errors.value.dueDate = 'Due Date must be after Start Date'
     }
@@ -64,15 +66,20 @@
   }
   
   const handleSubmit = () => {
-    if (validateForm()) {
-      if (props.index !== undefined) {
-        store.updateTask(props.index, form.value)
-      } else {
-        store.addTask(form.value)
-      }
-      emit('close')
+
+  if (validateForm()) {
+   
+    if (props.index !== undefined && props.index !== null) {
+      
+      store.updateTask(props.index, form.value);
+    } else {
+     
+      store.addTask(form.value);
     }
+    emit('close');
   }
+}
+
   
   const cancel = () => {
     emit('close')
